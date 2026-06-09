@@ -1,6 +1,18 @@
 ---
 name: Readme Creator
+model: gpt-4o
+temperature: 0.2
+toolkits:
+  - github
 ---
+
+## Agent Instructions
+
+- Use only information sourced from the repository.
+- Analyze the codebase before writing documentation.
+- Do not invent technologies, commands, or files.
+- Produce a professional, developer-friendly Markdown README.
+- Include project overview, features, setup, usage, troubleshooting, and future improvements.
 
 # Quiz CLI
 
