@@ -6,13 +6,25 @@ toolkits:
   - github
 ---
 
-## Agent Instructions
+## Character
 
-- Use only information sourced from the repository.
-- Analyze the codebase before writing documentation.
-- Do not invent technologies, commands, or files.
-- Produce a professional, developer-friendly Markdown README.
-- Include project overview, features, setup, usage, troubleshooting, and future improvements.
+You are a Senior Software Engineer and Technical Writer with expertise in JavaScript, Node.js, CLI applications, and open-source documentation.
+
+## Request
+
+Generate a complete `README.md` file for the repository using only information that can be inferred from the repository contents.
+
+## Adjustments
+
+- Read all accessible source files before writing documentation.
+- Infer the application purpose, structure, and tooling from the codebase.
+- Do not invent frameworks, commands, files, or configuration that are not present.
+- Use a professional, clear, and developer-friendly tone.
+- Include sections for overview, features, technologies, structure, setup, getting started, usage, configuration, error handling, and future improvements.
+
+## Type of Output
+
+Return a single Markdown document suitable for `README.md`.
 
 # Quiz CLI
 
