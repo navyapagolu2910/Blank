@@ -1,36 +1,22 @@
 ---
-name: Readme Creator
-model: gpt-4o
-temperature: 0.2
-toolkits:
-  - github
+name: Developers Assistant
+nested_agents:
+  - Github Reader
+  - Readme Creator
+  - Merge Request Creator
+orchestrator_instruction: >
+  1) Github Reader reads the repository content from the provided repository URL and branch,
+  2) Readme Creator generates a complete README.md from that repository information,
+  3) Merge Request Creator creates a new branch, commits README.md, and opens a pull request.
 ---
-
-## Character
-
-You are a Senior Software Engineer and Technical Writer with expertise in JavaScript, Node.js, CLI applications, and open-source documentation.
-
-## Request
-
-Generate a complete `README.md` file for the repository using only information that can be inferred from the repository contents.
-
-## Adjustments
-
-- Read all accessible source files before writing documentation.
-- Infer the application purpose, structure, and tooling from the codebase.
-- Do not invent frameworks, commands, files, or configuration that are not present.
-- Use a professional, clear, and developer-friendly tone.
-- Include sections for overview, features, technologies, structure, setup, getting started, usage, configuration, error handling, and future improvements.
-
-## Type of Output
-
-Return a single Markdown document suitable for `README.md`.
 
 # Quiz CLI
 
 ## Project Overview
 
-Quiz CLI is an interactive command-line quiz game built with Node.js. It lets users choose a category, select how many questions to answer, and receive instant feedback and a final score summary. The project is designed as a learning-focused terminal application and demonstrates core JavaScript and Node.js concepts such as ES modules, async/await, file system access, and user input handling.
+Quiz CLI is an interactive command-line quiz game built with Node.js. It lets users choose a category, select how many questions to answer, and receive immediate feedback along with a final score summary.
+
+The application is designed as a learning-focused terminal project and demonstrates core JavaScript and Node.js concepts such as ES modules, async/await, file system access, classes, and user input handling.
 
 > Note: The application source lives in the `test-app/` directory.
 
@@ -41,17 +27,17 @@ Quiz CLI is an interactive command-line quiz game built with Node.js. It lets us
 - Choice of quiz length based on available questions
 - Randomized question order using a shuffle algorithm
 - Immediate correctness feedback after each answer
-- Explanations shown for questions that include them
+- Optional question explanations
 - Final score summary with performance-based messaging
 - Review section for incorrect answers
 - Styled terminal output using ANSI colors
-- Graceful error handling with helpful console output
+- Graceful error handling with readable console output
 
 ## Technologies and Tools
 
 - **JavaScript (ES Modules)**
 - **Node.js 18+**
-- **Built-in Node APIs**:
+- **Built-in Node.js APIs**
   - `node:fs/promises` for loading quiz data
   - `node:path` and `node:url` for resolving file paths in ES modules
   - `node:readline` for interactive terminal input
@@ -106,8 +92,6 @@ Before running the application, make sure you have:
    npm install
    ```
 
-   > The current project does not use third-party dependencies, but running `npm install` is still a standard setup step and will prepare the project for future packages.
-
 ## Getting Started
 
 ### Run the Quiz
@@ -120,9 +104,9 @@ npm start
 
 This launches the interactive quiz in your terminal.
 
-### Test the Project
+### Run Tests
 
-The package includes a test script that uses Node's built-in test runner:
+The project includes a test script that uses Node's built-in test runner:
 
 ```bash
 npm test
@@ -137,15 +121,15 @@ cd test-app
 npm start
 ```
 
-### What you will do in the quiz
+### Typical quiz flow
 
 - Choose a category such as JavaScript Basics, Node.js Fundamentals, or General Programming
-- Pick how many questions to answer
+- Select how many questions to answer
 - Enter the number corresponding to your answer choice
 - Review your score and incorrect answers at the end
 - Decide whether to play again
 
-### Example interaction flow
+### Example interaction
 
 ```text
 Choose a category:
@@ -180,7 +164,7 @@ All quiz content is stored in `test-app/data/questions.json`. Each category cont
 - The correct answer index
 - Optional explanations
 
-If you want to expand the quiz, add new categories or questions in that file following the same structure.
+To expand the quiz, add new categories or questions in that file using the same structure.
 
 ## Error Handling and Troubleshooting
 
@@ -201,7 +185,7 @@ The input helpers validate user selections and keep prompting until a valid opti
 - **`node: command not found`**
   - Install Node.js 18 or later and confirm it is available on your PATH.
 
-- **Invalid module / syntax errors**
+- **Invalid module or syntax errors**
   - Make sure you are running the app from `test-app/` and using a supported Node.js version.
 
 - **Questions not loading**
@@ -211,7 +195,7 @@ The input helpers validate user selections and keep prompting until a valid opti
 
 Potential enhancements for this project include:
 
-- Adding more quiz categories and more questions
+- Adding more quiz categories and questions
 - Supporting custom quiz creation from the terminal
 - Tracking high scores between sessions
 - Adding timed questions
