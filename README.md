@@ -1,221 +1,240 @@
 ---
-name: Readme Creator
-model: gpt-4o
-temperature: 0.2
-toolkits:
-  - github
+name: Developers Assistant
+nested_agents:
+  - Github Reader
+  - Readme Creator
+  - Merge Request Creator
+orchestrator_instruction: >-
+  Follow the workflow in this exact order: Github Reader -> Readme Creator -> Merge Request Creator.
+  The Github Reader gathers repository facts from the codebase, the Readme Creator turns those facts into
+  a complete README.md, and the Merge Request Creator prepares the final change for review.
 ---
 
-## Character
-
-You are a Senior Software Engineer and Technical Writer with expertise in JavaScript, Node.js, CLI applications, and open-source documentation.
-
-## Request
-
-Generate a complete `README.md` file for the repository using only information that can be inferred from the repository contents.
-
-## Adjustments
-
-- Read all accessible source files before writing documentation.
-- Infer the application purpose, structure, and tooling from the codebase.
-- Do not invent frameworks, commands, files, or configuration that are not present.
-- Use a professional, clear, and developer-friendly tone.
-- Include sections for overview, features, technologies, structure, setup, getting started, usage, configuration, error handling, and future improvements.
-
-## Type of Output
-
-Return a single Markdown document suitable for `README.md`.
-
-# Quiz CLI
+# quiz-cli
 
 ## Project Overview
 
-Quiz CLI is an interactive command-line quiz game built with Node.js. It lets users choose a category, select how many questions to answer, and receive instant feedback and a final score summary. The project is designed as a learning-focused terminal application and demonstrates core JavaScript and Node.js concepts such as ES modules, async/await, file system access, and user input handling.
+`quiz-cli` is a Node.js command-line quiz game located in `test-app/`. It presents an interactive terminal experience where users can choose a quiz category, answer multiple-choice questions, and review their results at the end.
 
-> Note: The application source lives in the `test-app/` directory.
+The application is built with Node.js ES modules and uses only built-in Node.js APIs. Its source code is organized into a small CLI entrypoint, reusable input helpers, quiz logic, terminal color helpers, and a JSON question bank.
 
 ## Features
 
-- Interactive terminal-based quiz experience
-- Category selection from a JSON question bank
-- Choice of quiz length based on available questions
-- Randomized question order using a shuffle algorithm
-- Immediate correctness feedback after each answer
-- Explanations shown for questions that include them
-- Final score summary with performance-based messaging
-- Review section for incorrect answers
-- Styled terminal output using ANSI colors
-- Graceful error handling with helpful console output
+- Interactive terminal quiz experience
+- Category-based question selection
+- Choice of question count per quiz
+- Randomized question order
+- Progress display during the quiz
+- Immediate feedback for correct and incorrect answers
+- Explanations shown after each question when available
+- Final score summary with performance messages
+- Review of incorrect answers after completion
+- Play-again loop for continuous sessions
+- ANSI-based terminal color formatting without external dependencies
 
 ## Technologies and Tools
 
-- **JavaScript (ES Modules)**
-- **Node.js 18+**
-- **Built-in Node APIs**:
-  - `node:fs/promises` for loading quiz data
-  - `node:path` and `node:url` for resolving file paths in ES modules
-  - `node:readline` for interactive terminal input
-- **npm** for package management and scripts
-- **ANSI escape codes** for terminal text styling
+- **Language:** JavaScript
+- **Runtime:** Node.js `>=18.0.0`
+- **Module system:** ES Modules (`"type": "module"`)
+- **Built-in Node.js modules used:**
+  - `node:fs/promises`
+  - `node:url`
+  - `node:path`
+  - `node:readline`
+- **CLI execution:** Node.js command-line runtime
+- **Testing script:** `node --test` as defined in `package.json`
 
 ## Project Structure
 
 ```text
-.
-├── README.md
-└── test-app/
-    ├── index.js
-    ├── package.json
-    ├── data/
-    │   └── questions.json
-    └── src/
-        ├── colors.js
-        ├── input.js
-        └── quiz.js
+test-app/
+├── data/
+│   └── questions.json
+├── index.js
+├── package.json
+└── src/
+    ├── colors.js
+    ├── input.js
+    └── quiz.js
 ```
 
-### Important Files
+### File responsibilities
 
-- `test-app/index.js` - Application entry point and main game loop
-- `test-app/package.json` - Project metadata, scripts, and Node.js engine requirement
-- `test-app/data/questions.json` - Quiz categories, questions, answers, and explanations
-- `test-app/src/input.js` - Reusable terminal input helpers
-- `test-app/src/colors.js` - ANSI color utilities for terminal output
-- `test-app/src/quiz.js` - Quiz logic, scoring, progress display, and results output
+- **`test-app/index.js`**  
+  Main CLI entrypoint. Loads quiz data, renders the banner, coordinates category and question-count selection, runs the quiz loop, and handles top-level errors.
+
+- **`test-app/src/quiz.js`**  
+  Contains the `Quiz` class, including question shuffling, answer tracking, progress rendering, result display, and incorrect-answer review.
+
+- **`test-app/src/input.js`**  
+  Provides readline-based helpers for prompting, selection, confirmation, and pause/continue behavior.
+
+- **`test-app/src/colors.js`**  
+  Provides ANSI color utilities for terminal styling.
+
+- **`test-app/data/questions.json`**  
+  Stores the quiz content grouped into categories.
+
+- **`test-app/package.json`**  
+  Defines project metadata, runtime requirements, and npm scripts.
 
 ## Prerequisites
 
-Before running the application, make sure you have:
+- Node.js `18.0.0` or newer
+- A terminal capable of displaying ANSI escape codes
 
-- **Node.js 18.0.0 or later**
-- **npm** (included with Node.js)
+No external npm dependencies are declared in `package.json`.
 
 ## Setup Instructions
 
-1. Clone or download the repository.
-2. Open a terminal in the repository root.
-3. Change into the application directory:
-
+1. Clone the repository.
+2. Change into the application directory:
    ```bash
    cd test-app
    ```
-
-4. Install dependencies:
-
-   ```bash
-   npm install
-   ```
-
-   > The current project does not use third-party dependencies, but running `npm install` is still a standard setup step and will prepare the project for future packages.
+3. Ensure you are using Node.js 18 or newer.
+4. Run the application with the provided npm script or directly with Node.js.
 
 ## Getting Started
 
-### Run the Quiz
+### Run the quiz
 
-From the `test-app/` directory, start the application with:
+From inside `test-app/`:
 
 ```bash
 npm start
 ```
 
-This launches the interactive quiz in your terminal.
+This runs:
 
-### Test the Project
+```bash
+node index.js
+```
 
-The package includes a test script that uses Node's built-in test runner:
+You can also start the app directly:
+
+```bash
+node index.js
+```
+
+### Run the test script
+
+The project defines a test script in `package.json`:
 
 ```bash
 npm test
 ```
 
+This uses Node’s built-in test runner:
+
+```bash
+node --test
+```
+
 ## Usage Examples
 
-### Start the application
+### Start the quiz
 
 ```bash
 cd test-app
 npm start
 ```
 
-### What you will do in the quiz
+### Run the entrypoint directly
 
-- Choose a category such as JavaScript Basics, Node.js Fundamentals, or General Programming
-- Pick how many questions to answer
-- Enter the number corresponding to your answer choice
-- Review your score and incorrect answers at the end
-- Decide whether to play again
-
-### Example interaction flow
-
-```text
-Choose a category:
-  1. JavaScript Basics
-  2. Node.js Fundamentals
-  3. General Programming
-
-How many questions?
-  1. All questions
-  2. 3 questions
-  3. 5 questions
+```bash
+cd test-app
+node index.js
 ```
+
+### Run tests
+
+```bash
+cd test-app
+npm test
+```
+
+### Typical gameplay flow
+
+1. Launch the app.
+2. Choose a category.
+3. Choose how many questions to answer.
+4. Answer each multiple-choice question by entering the option number.
+5. Review your score and any incorrect answers.
+6. Decide whether to play again.
 
 ## Configuration
 
-### `package.json`
+The main configuration lives in the repository files themselves:
 
-The `test-app/package.json` file defines:
+- **`package.json`**
+  - `main`: `index.js`
+  - `type`: `module`
+  - `scripts.start`: `node index.js`
+  - `scripts.test`: `node --test`
+  - `engines.node`: `>=18.0.0`
 
-- `start` script: `node index.js`
-- `test` script: `node --test`
-- `type: module` to enable ES module syntax
-- `engines.node: >=18.0.0`
+- **`data/questions.json`**
+  - Stores all quiz categories and questions.
+  - Each question includes:
+    - `question`
+    - `options`
+    - `answer`
+    - `explanation`
 
-### Quiz Data
-
-All quiz content is stored in `test-app/data/questions.json`. Each category contains:
-
-- A category name
-- A list of questions
-- Multiple-choice options
-- The correct answer index
-- Optional explanations
-
-If you want to expand the quiz, add new categories or questions in that file following the same structure.
+There are no environment variables or external configuration files referenced in the source.
 
 ## Error Handling and Troubleshooting
 
-### Built-in Error Handling
+### Error handling behavior
 
-The application wraps startup and execution logic in a `try/catch` block. If something goes wrong, it:
+The CLI includes top-level error handling in `index.js`:
 
-- Prints a readable error message
-- Outputs the stack trace for debugging
-- Exits with a non-zero status code
+- Application logic is wrapped in a `try/catch`
+- Failures are printed with a styled error message
+- The process exits with code `1` on fatal errors
+- The `readline` interface is always closed in a `finally` block
 
-### Input Validation
+### Input validation
 
-The input helpers validate user selections and keep prompting until a valid option number is entered. This helps prevent crashes caused by invalid menu input.
+The input helper rejects invalid menu selections and prompts again until the user enters a valid number.
 
-### Common Troubleshooting Tips
+### Common troubleshooting tips
 
-- **`node: command not found`**
-  - Install Node.js 18 or later and confirm it is available on your PATH.
-
-- **Invalid module / syntax errors**
-  - Make sure you are running the app from `test-app/` and using a supported Node.js version.
-
-- **Questions not loading**
-  - Check that `test-app/data/questions.json` exists and contains valid JSON.
+- **“Cannot find module” or syntax issues:** make sure you are running Node.js 18+.
+- **Quiz does not start:** confirm you are executing the app from inside `test-app/`.
+- **Terminal colors look odd:** your terminal may not fully support ANSI escape codes.
+- **JSON parsing errors:** verify that `data/questions.json` remains valid JSON.
 
 ## Future Improvements
 
-Potential enhancements for this project include:
+Potential enhancements suggested by the current codebase:
 
-- Adding more quiz categories and more questions
-- Supporting custom quiz creation from the terminal
-- Tracking high scores between sessions
-- Adding timed questions
-- Introducing difficulty levels
-- Writing automated tests for quiz logic and input helpers
-- Improving accessibility and keyboard navigation
-- Persisting results to a local file or database
+- Add more quiz categories and questions
+- Add persistent score history
+- Support custom quiz lengths beyond the current preset options
+- Allow random category selection
+- Add automated tests for quiz behavior and input handling
+- Improve accessibility for non-ANSI terminals
+- Add packaging for easier global CLI installation
+- Persist user progress or best scores between sessions
+
+## Orchestrator Workflow
+
+This repository documentation is intended to be produced through the following agent workflow:
+
+1. **Github Reader**  
+   Reads the repository contents and extracts only facts supported by the code.
+
+2. **Readme Creator**  
+   Converts those facts into a complete, professional `README.md`.
+
+3. **Merge Request Creator**  
+   Packages the README changes for review and submission.
+
+The required order is:
+
+**Github Reader -> Readme Creator -> Merge Request Creator**
+
+This order should be followed exactly to ensure the README is based on repository evidence before any final submission is prepared.
